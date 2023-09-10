@@ -16,9 +16,9 @@ const Footer: React.FC = () => {
         {
           key: 'github',
           title: (
-            <a>
+            <>
               <GithubOutlined /> git源码
-            </a>
+            </>
           ),
           href: 'https://github.com/coderGuoHL/usercenter-fontend',
           blankTarget: true,
