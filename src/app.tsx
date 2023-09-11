@@ -11,6 +11,10 @@ import { currentUser as queryCurrentUser } from './services/ant-design-pro/api';
 const isDev = process.env.NODE_ENV === 'development';
 const loginPath = '/user/login';
 
+const registerPath = '/user/register'
+
+const WHITE_LIST = [loginPath, registerPath]
+
 /** 获取用户信息比较慢的时候会展示一个 loading */
 export const initialStateConfig = {
   loading: <PageLoading />,
@@ -34,8 +38,9 @@ export async function getInitialState(): Promise<{
     }
     return undefined;
   };
-  // 如果不是登录页面，执行
-  if (history.location.pathname !== loginPath) {
+
+  // 如果不在白名单内，则不做请求，避免了前端的请求
+  if (!WHITE_LIST.includes(history.location.pathname)) {
     const currentUser = await fetchUserInfo();
     return {
       fetchUserInfo,
@@ -43,6 +48,7 @@ export async function getInitialState(): Promise<{
       settings: defaultSettings,
     };
   }
+
   return {
     fetchUserInfo,
     settings: defaultSettings,
@@ -61,7 +67,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
     onPageChange: () => {
       const { location } = history;
       // 如果没有登录，重定向到 login
-      if (!initialState?.currentUser && location.pathname !== loginPath) {
+      if (!initialState?.currentUser && !WHITE_LIST.includes(location.pathname)) {
         history.push(loginPath);
       }
     },
