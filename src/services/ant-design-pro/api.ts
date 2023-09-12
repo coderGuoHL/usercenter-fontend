@@ -2,12 +2,10 @@
 /* eslint-disable */
 import { request } from 'umi';
 
-/** 获取当前的用户 GET /api/currentUser */
+/** 获取当前的用户 POST /api/user/currentUser */
 export async function currentUser(options?: { [key: string]: any }) {
-  return request<{
-    data: API.CurrentUser;
-  }>('/api/currentUser', {
-    method: 'GET',
+  return request<API.CurrentUser>('/api/user/currentUser', {
+    method: 'POST',
     ...(options || {}),
   });
 }

@@ -2,9 +2,9 @@ import Footer from '@/components/Footer';
 import { login } from '@/services/ant-design-pro/api';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { LoginForm, ProFormText } from '@ant-design/pro-components';
-import { Alert, message, Tabs } from 'antd';
+import {Alert, Divider, message, Space, Tabs} from 'antd';
 import React, { useState } from 'react';
-import { history, useModel } from 'umi';
+import {history, Link, useModel} from 'umi';
 import styles from './index.less';
 
 const LoginMessage: React.FC<{
@@ -20,11 +20,12 @@ const LoginMessage: React.FC<{
   />
 );
 const Login: React.FC = () => {
-  const [userLoginState, setUserLoginState] = useState<API.LoginResult>({});
+  const [userLoginState] = useState<API.LoginResult>({});
   const [type, setType] = useState<string>('account');
   const { initialState, setInitialState } = useModel('@@initialState');
   const fetchUserInfo = async () => {
     const userInfo = await initialState?.fetchUserInfo?.();
+    console.log(userInfo);
     if (userInfo) {
       await setInitialState((s) => ({
         ...s,
@@ -32,17 +33,19 @@ const Login: React.FC = () => {
       }));
     }
   };
+
   const handleSubmit = async (values: API.LoginParams) => {
     try {
       // 登录
-      const msg = await login({
-        ...values,
+      const user = await login({
+        ...values
       });
-      if (msg.status === 'ok') {
+      if (user) {
         const defaultLoginSuccessMessage = '登录成功！';
         message.success(defaultLoginSuccessMessage);
         await fetchUserInfo();
         /** 此方法会跳转到 redirect 参数所在的位置 */
+        console.log(history);
         if (!history) return;
         const { query } = history.location;
         const { redirect } = query as {
@@ -50,10 +53,9 @@ const Login: React.FC = () => {
         };
         history.push(redirect || '/');
         return;
+      } else {
+        throw new Error('请求登录失败，请联系管理员');
       }
-      console.log(msg);
-      // 如果失败去设置用户错误信息
-      setUserLoginState(msg);
     } catch (error) {
       const defaultLoginFailureMessage = '登录失败，请重试！';
       message.error(defaultLoginFailureMessage);
@@ -114,19 +116,23 @@ const Login: React.FC = () => {
             </>
           )}
 
-          {status === 'error' && loginType === 'mobile' && <LoginMessage content="验证码错误" />}
           <div
             style={{
               marginBottom: 24,
             }}
           >
-            <a
-              style={{
-                float: 'right',
-              }}
-            >
-              忘记密码 ?
-            </a>
+            <Space>
+              <Link to={'/user/register'}>注册账户</Link>
+              <Divider type={"vertical"} />
+              <a
+                style={{
+                  float: 'right',
+                }}
+              >
+                忘记密码 ?
+              </a>
+            </Space>
+
           </div>
         </LoginForm>
       </div>
