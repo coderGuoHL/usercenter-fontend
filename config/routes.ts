@@ -15,11 +15,10 @@
     icon: 'crown',
     access: 'canAdmin',
     routes: [
-      { path: '/admin/sub-page', name: '二级管理页', icon: 'smile', component: './Welcome' },
-      { component: './404' },
+      { path: '/admin/user-manager', name: '用户管理页', icon: 'smile', component: './Admin/UserManager' },
+      { component: './Admin/UserManager' },
     ],
   },
-  { name: '查询表格', icon: 'table', path: '/list', component: './TableList' },
   { path: '/', redirect: '/welcome' },
   { component: './404' },
 ];
