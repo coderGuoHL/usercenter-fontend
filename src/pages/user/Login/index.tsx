@@ -47,14 +47,8 @@ const Login: React.FC = () => {
         /** 此方法会跳转到 redirect 参数所在的位置 */
         console.log(history);
         if (!history) return;
-        const { query } = history.location;
-        const { redirect } = query as {
-          redirect: string;
-        };
-        history.push(redirect || '/');
+        history.push('/welcome');
         return;
-      } else {
-        throw new Error('请求登录失败，请联系管理员');
       }
     } catch (error) {
       const defaultLoginFailureMessage = '登录失败，请重试！';

@@ -3,6 +3,7 @@ import { message, Tag } from 'antd';
 import { groupBy } from 'lodash';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
+// @ts-ignore
 import { useModel, useRequest } from 'umi';
 import styles from './index.less';
 import NoticeIcon from './NoticeIcon';
@@ -110,7 +111,7 @@ const NoticeIconView: React.FC = () => {
   return (
     <NoticeIcon
       className={styles.action}
-      count={currentUser && currentUser.unreadCount}
+      count={currentUser && 1}
       onItemClick={(item) => {
         changeReadState(item.id!);
       }}
